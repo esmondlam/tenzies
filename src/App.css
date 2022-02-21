@@ -75,3 +75,24 @@ main {
 .roll-dice:active {
   box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
 }
+
+@media only screen and (max-width: 480px) {
+  .title {
+    font-size: 1.75rem
+  }
+  .instructions {
+    font-size: 0.75rem;
+  }
+  .die-face {
+    width: 2em;
+    height: 2em;
+  }
+
+  .die-num {
+    font-size: 1rem;
+  }
+
+  .roll-dice {
+    font-size: 0.75rem;
+  }
+}
