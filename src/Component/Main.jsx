@@ -1,22 +1,32 @@
 import Die from './Die'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import Confetti from 'react-confetti'
+import Timer from './Timer'
 
 export default function Main() {
 
     const [dice, setDice] = useState(allNewDice())
-    const [tenzies, setTenzies] = React.useState(false)
+    const [tenzies, setTenzies] = useState(false)
+    const [second, setSecond] = useState(0)
+    const [bestTime, setBestTime] = useState(
+        JSON.parse(localStorage.getItem("best-time"))|| 10000
+    )
 
-    React.useEffect(() => {
+    useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
         const firstValue = dice[0].value
         const allSameValue = dice.every(die => die.value === firstValue)
         if (allHeld && allSameValue) {
             setTenzies(true)
-            console.log("You won!")
+            if(second < bestTime) {setBestTime(second)}
+            setSecond(0)
         }
     }, [dice])
+
+    useEffect(() => {
+        localStorage.setItem("best-time", JSON.stringify(bestTime))
+    }, [bestTime])
 
     function generateNewDie() {
         return {
@@ -73,6 +83,14 @@ export default function Main() {
             <br />Click each die to freeze it at its current value between rolls.</p>
             <div className="dice-container">
                 {diceElements}
+            </div>
+            <div className="timer">
+                <Timer 
+                    tenzies={tenzies}
+                    second={second}
+                    setSecond={setSecond}
+                />
+                {bestTime !== 10000 && <h3>Best time: {bestTime}s</h3>}
             </div>
             <button 
                 className="roll-dice" 
